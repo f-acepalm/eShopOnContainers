@@ -48,6 +48,7 @@ services:
       - MvcClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5100
       - BasketApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
+      - CouponApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5106
       - MobileShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5120
       - WebShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
       - WebhooksApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5113
@@ -173,6 +174,27 @@ services:
     ports:
       - "5113:80"
 
+  coupon-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}
+      - UseCustomizationData=True
+      - AzureServiceBusEnabled=False
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - IdentityUrl=http://identity-api
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - UseLoadTest=${USE_LOADTEST:-False}
+      - PORT=80
+      - PATH_BASE=/coupon-api
+      - ConnectionString=mongodb://nosqldata:27017
+    ports:
+      - "5106:80"
+      - "9106:81"
+
   mobileshoppingapigw:
     volumes:
       - ./ApiGateways/Envoy/config/mobileshopping:/etc/envoy
@@ -193,12 +215,14 @@ services:
       - urls__basket=http://basket-api
       - urls__catalog=http://catalog-api
       - urls__orders=http://ordering-api
+      - urls__coupon=http://coupon-api
       - urls__identity=http://identity-api
       - urls__grpcBasket=http://basket-api:81
       - urls__grpcCatalog=http://catalog-api:81
       - urls__grpcOrdering=http://ordering-api:81
       - CatalogUrlHC=http://catalog-api/hc
       - OrderingUrlHC=http://ordering-api/hc
+      - CouponUrlHC=http://coupon-api/hc
       - IdentityUrlHC=http://identity-api/hc
       - BasketUrlHC=http://basket-api/hc
       - PaymentUrlHC=http://payment-api/hc
@@ -212,12 +236,14 @@ services:
       - urls__basket=http://basket-api
       - urls__catalog=http://catalog-api
       - urls__orders=http://ordering-api
+      - urls__coupon=http://coupon-api
       - urls__identity=http://identity-api
       - urls__grpcBasket=http://basket-api:81
       - urls__grpcCatalog=http://catalog-api:81
       - urls__grpcOrdering=http://ordering-api:81
       - CatalogUrlHC=http://catalog-api/hc
       - OrderingUrlHC=http://ordering-api/hc
+      - CouponUrlHC=http://coupon-api/hc
       - IdentityUrlHC=http://identity-api/hc
       - BasketUrlHC=http://basket-api/hc
       - PaymentUrlHC=http://payment-api/hc
@@ -265,6 +291,8 @@ services:
       - HealthChecksUI__HealthChecks__9__Uri=http://ordering-signalrhub/hc
       - HealthChecksUI__HealthChecks__10__Name=Ordering HTTP Background Check
       - HealthChecksUI__HealthChecks__10__Uri=http://ordering-backgroundtasks/hc
+      - HealthChecksUI__HealthChecks__11__Name=Coupon HTTP Check
+      - HealthChecksUI__HealthChecks__11__Uri=http://coupon-api/hc
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
     ports:
@@ -272,7 +300,7 @@ services:
 
   webspa:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - IdentityUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - PurchaseUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
