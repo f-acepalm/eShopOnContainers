@@ -19,7 +19,7 @@ public class OrderStatus
     }
 
     public static IEnumerable<OrderStatus> List() =>
-        new[] { Submitted, AwaitingValidation, StockConfirmed, AwaitingCouponValidation, Paid, Shipped, Cancelled };
+        new[] { Submitted, AwaitingValidation, AwaitingCouponValidation, StockConfirmed, Paid, Shipped, Cancelled };
 
     public static OrderStatus FromName(string name)
     {
