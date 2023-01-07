@@ -1,13 +1,17 @@
 using HealthChecks.UI.Client;
+using Loyalty.API.DataAccess;
 using Loyalty.API.Extensions;
 using Loyalty.API.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Reflection;
 
 namespace Loyalty.API;
 
@@ -25,6 +29,7 @@ public class Startup
         services.AddControllers(options => options.Filters.Add<ValidateModelAttribute>());
 
         services.AddCustomSettings(Configuration)
+            .AddCustomDbContext(Configuration)
             .AddLoyaltyServices(Configuration)
             .AddCustomPolicies()
             .AddAppInsights(Configuration)
@@ -34,8 +39,8 @@ public class Startup
             .AddSwagger(Configuration)
             .AddCustomHealthCheck(Configuration);
 
-        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
-        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>, OrderStatusChangedToCancelledIntegrationEventHandler>();
+        //services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
+        //services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>, OrderStatusChangedToCancelledIntegrationEventHandler>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,9 +60,9 @@ public class Startup
         app.UseSwagger()
             .UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint($"{(!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty)}/swagger/v1/swagger.json", "Coupon.API V1");
-                options.OAuthClientId("couponswaggerui");
-                options.OAuthAppName("eShop-Learn.Coupon.API Swagger UI");
+                options.SwaggerEndpoint($"{(!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty)}/swagger/v1/swagger.json", "Loyalty.API V1");
+                options.OAuthClientId("loyaltyswaggerui");
+                options.OAuthAppName("eShop-Learn.Loyalty.API Swagger UI");
             })
             .UseCors("CorsPolicy")
             .UseRouting()
@@ -78,13 +83,12 @@ public class Startup
             });
 
         ConfigureEventBus(app);
-    }
+    }   
 
     private void ConfigureEventBus(IApplicationBuilder app)
     {
         IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-        eventBus.Subscribe<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>>();
-        eventBus.Subscribe<OrderStatusChangedToCancelledIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>>();
+        //eventBus.Subscribe<OrderStatusChangedToCancelledIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>>();
     }
 }

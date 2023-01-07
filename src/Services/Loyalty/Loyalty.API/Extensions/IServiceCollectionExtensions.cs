@@ -1,8 +1,10 @@
 ﻿using Autofac;
+using Loyalty.API.DataAccess;
 using Loyalty.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
@@ -15,11 +17,33 @@ using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Loyalty.API.Extensions;
 
 public static class IServiceCollectionExtensions
 {
+    public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<LoyaltyContext>(
+            options =>
+            {
+                options.UseSqlServer(
+                    configuration["ConnectionString"],
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                        sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null);
+                    });
+            },
+            ServiceLifetime.Scoped);
+
+        return services;
+    }
+
     public static IServiceCollection AddLoyaltyServices(this IServiceCollection services, IConfiguration configuration)
     {
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
@@ -154,11 +178,10 @@ public static class IServiceCollectionExtensions
         {
             services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
             {
-                IRabbitMQPersistentConnection rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-                ILifetimeScope iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                ILogger<EventBusRabbitMQ> logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                IEventBusSubscriptionsManager eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
+                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
                 var retryCount = 5;
 
                 if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
@@ -175,16 +198,15 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
     {
-        //var accountName = configuration.GetValue<string>("AzureStorageAccountName");
-        //var accountKey = configuration.GetValue<string>("AzureStorageAccountKey");
-
         IHealthChecksBuilder hcBuilder = services.AddHealthChecks();
 
-        hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy())
-            .AddMongoDb(
+        hcBuilder
+            .AddCheck("self", () => HealthCheckResult.Healthy())
+            .AddSqlServer(
                 configuration["ConnectionString"],
-                name: "CouponCollection-check",
-                tags: new string[] { "couponcollection" });
+                name: "LoyaltyDB-check",
+                tags: new string[] { "loyaltydb" });
+
 
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
