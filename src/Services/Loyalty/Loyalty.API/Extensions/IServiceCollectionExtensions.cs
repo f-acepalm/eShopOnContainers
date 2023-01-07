@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Loyalty.API.DataAccess;
+using Loyalty.API.DataAccess.Repositories;
 using Loyalty.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -87,10 +88,8 @@ public static class IServiceCollectionExtensions
             });
         }
 
-        services/*.AddTransient<ICouponRepository, CouponRepository>()*/
+        services.AddTransient<ILoyaltyRepository, LoyaltyRepository>()
             .AddTransient<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            //.AddTransient<CouponContext>()
-            //.AddTransient<IMapper<CouponDto, Coupon>, Mapper>();
 
         return services;
     }
