@@ -1,5 +1,5 @@
-﻿using Loyalty.API.DataAccess;
-using Loyalty.API.DataAccess.Entities;
+﻿using Loyalty.API.DataAccess.Entities;
+using Loyalty.API.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

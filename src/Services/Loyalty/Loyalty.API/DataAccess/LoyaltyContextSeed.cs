@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Loyalty.API.DataAccess;
@@ -16,8 +17,11 @@ public class LoyaltyContextSeed
         AsyncRetryPolicy policy = CreatePolicy(logger, nameof(LoyaltyContextSeed));
         await policy.ExecuteAsync(async () =>
         {
-            await context.MemberTiers.AddRangeAsync(GetMemberTiers());
-            await context.SaveChangesAsync();
+            if (!context.MemberTiers.Any())
+            {
+                await context.MemberTiers.AddRangeAsync(GetMemberTiers());
+                await context.SaveChangesAsync(); 
+            }
         });
     }
 
@@ -26,8 +30,8 @@ public class LoyaltyContextSeed
         return new[]
         {
             new MemberTier { Name = "newcomer", Threshold = 0, Discount = 0 },
-            new MemberTier { Name = "newcomer", Threshold = 20, Discount = 10 },
-            new MemberTier { Name = "newcomer", Threshold = 50, Discount = 20 },
+            new MemberTier { Name = "advanced", Threshold = 20, Discount = 10 },
+            new MemberTier { Name = "expert", Threshold = 50, Discount = 20 },
         };
     }
 

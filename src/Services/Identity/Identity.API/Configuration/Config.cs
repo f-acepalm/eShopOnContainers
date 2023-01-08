@@ -16,6 +16,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                 new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
                 new ApiResource("webhooks", "Webhooks registration Service"),
                 new ApiResource("coupon", "Coupon Service"),
+                new ApiResource("loyalty", "Loyalty Service"),
             };
         }
 
@@ -55,7 +56,8 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         "webshoppingagg",
                         "orders.signalrhub",
                         "webhooks",
-                        "coupon"
+                        "coupon",
+                        "loyalty"
                     },
                 },
                 new Client
@@ -82,7 +84,8 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         "basket",
                         "mobileshoppingagg",
                         "webhooks",
-                        "coupon"
+                        "coupon",
+                        "loyalty"
                     },
                     //Allow requesting refresh tokens for long lived API access
                     AllowOfflineAccess = true,
@@ -121,7 +124,8 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         "webshoppingagg",
                         "orders.signalrhub",
                         "webhooks",
-                        "coupon"
+                        "coupon",
+                        "loyalty"
                     },
                     AccessTokenLifetime = 60*60*2, // 2 hours
                     IdentityTokenLifetime= 60*60*2 // 2 hours
@@ -188,7 +192,8 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                         "basket",
                         "webshoppingagg",
                         "webhooks",
-                        "coupon"
+                        "coupon",
+                        "loyalty"
                     },
                 },
                 new Client
@@ -280,6 +285,21 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                     AllowedScopes =
                     {
                         "coupon"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "loyaltyswaggerui",
+                    ClientName = "Loyalty Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["LoyaltyApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["LoyaltyApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "loyalty"
                     }
                 }
             };

@@ -1,3 +1,5 @@
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
 using HealthChecks.UI.Client;
 using Loyalty.API.DataAccess;
 using Loyalty.API.Extensions;
@@ -24,7 +26,7 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
         services.AddControllers(options => options.Filters.Add<ValidateModelAttribute>());
 
@@ -41,6 +43,11 @@ public class Startup
 
         //services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
         //services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>, OrderStatusChangedToCancelledIntegrationEventHandler>();
+
+        var container = new ContainerBuilder();
+        container.Populate(services);
+
+        return new AutofacServiceProvider(container.Build());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

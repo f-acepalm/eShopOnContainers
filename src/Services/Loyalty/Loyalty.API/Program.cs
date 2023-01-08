@@ -1,3 +1,4 @@
+using Autofac.Extensions.DependencyInjection;
 using Loyalty.API;
 using Loyalty.API.DataAccess;
 using Microsoft.AspNetCore;

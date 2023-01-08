@@ -49,6 +49,7 @@ services:
       - BasketApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
       - CouponApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5106
+      - LoyaltyApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5109
       - MobileShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5120
       - WebShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
       - WebhooksApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5113
@@ -195,6 +196,26 @@ services:
       - "5106:80"
       - "9106:81"
 
+  loyalty-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}
+      - AzureServiceBusEnabled=False
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - IdentityUrl=http://identity-api
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - UseLoadTest=${USE_LOADTEST:-False}
+      - PORT=80
+      - PATH_BASE=/loyalty-api
+      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.LoyaltyDb;User Id=sa;Password=Pass@word}
+    ports:
+      - "5109:80"
+      - "9109:81"
+
   mobileshoppingapigw:
     volumes:
       - ./ApiGateways/Envoy/config/mobileshopping:/etc/envoy
@@ -216,6 +237,7 @@ services:
       - urls__catalog=http://catalog-api
       - urls__orders=http://ordering-api
       - urls__coupon=http://coupon-api
+      - urls__loyalty=http://loyalty-api
       - urls__identity=http://identity-api
       - urls__grpcBasket=http://basket-api:81
       - urls__grpcCatalog=http://catalog-api:81
@@ -223,6 +245,7 @@ services:
       - CatalogUrlHC=http://catalog-api/hc
       - OrderingUrlHC=http://ordering-api/hc
       - CouponUrlHC=http://coupon-api/hc
+      - LoyaltyUrlHC=http://loyalty-api/hc
       - IdentityUrlHC=http://identity-api/hc
       - BasketUrlHC=http://basket-api/hc
       - PaymentUrlHC=http://payment-api/hc
@@ -243,7 +266,7 @@ services:
       - urls__grpcOrdering=http://ordering-api:81
       - CatalogUrlHC=http://catalog-api/hc
       - OrderingUrlHC=http://ordering-api/hc
-      - CouponUrlHC=http://coupon-api/hc
+      - LoyaltyUrlHC=http://loyalty-api/hc
       - IdentityUrlHC=http://identity-api/hc
       - BasketUrlHC=http://basket-api/hc
       - PaymentUrlHC=http://payment-api/hc
@@ -293,6 +316,8 @@ services:
       - HealthChecksUI__HealthChecks__10__Uri=http://ordering-backgroundtasks/hc
       - HealthChecksUI__HealthChecks__11__Name=Coupon HTTP Check
       - HealthChecksUI__HealthChecks__11__Uri=http://coupon-api/hc
+      - HealthChecksUI__HealthChecks__12__Name=Loyalty HTTP Check
+      - HealthChecksUI__HealthChecks__12__Uri=http://loyalty-api/hc
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
     ports:
