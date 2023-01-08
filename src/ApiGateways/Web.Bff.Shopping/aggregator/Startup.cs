@@ -21,7 +21,8 @@ public class Startup
             .AddUrlGroup(new Uri(Configuration["BasketUrlHC"]), name: "basketapi-check", tags: new string[] { "basketapi" })
             .AddUrlGroup(new Uri(Configuration["IdentityUrlHC"]), name: "identityapi-check", tags: new string[] { "identityapi" })
             .AddUrlGroup(new Uri(Configuration["PaymentUrlHC"]), name: "paymentapi-check", tags: new string[] { "paymentapi" })
-            .AddUrlGroup(new Uri(Configuration["CouponUrlHC"]), name: "couponapi-check", tags: new string[] { "couponapi" });
+            .AddUrlGroup(new Uri(Configuration["CouponUrlHC"]), name: "couponapi-check", tags: new string[] { "couponapi" })
+            .AddUrlGroup(new Uri(Configuration["LoyaltyUrlHC"]), name: "loyalty-check", tags: new string[] { "loyaltyapi" });
 
         // HC dependency is configured this way to save one build step on ACR
         //var couponHealthEndpoint = Configuration["CouponUrlHC"];
@@ -174,6 +175,9 @@ public static class ServiceCollectionExtensions
             .AddDevspacesSupport();
 
         services.AddHttpClient<ICouponService, CouponService>()
+    .       AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<ILoyaltyService, LoyaltyService>()
     .       AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
         return services;

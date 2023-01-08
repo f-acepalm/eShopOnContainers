@@ -260,12 +260,14 @@ services:
       - urls__catalog=http://catalog-api
       - urls__orders=http://ordering-api
       - urls__coupon=http://coupon-api
+      - urls__loyalty=http://loyalty-api
       - urls__identity=http://identity-api
       - urls__grpcBasket=http://basket-api:81
       - urls__grpcCatalog=http://catalog-api:81
       - urls__grpcOrdering=http://ordering-api:81
       - CatalogUrlHC=http://catalog-api/hc
       - OrderingUrlHC=http://ordering-api/hc
+      - CouponUrlHC=http://coupon-api/hc
       - LoyaltyUrlHC=http://loyalty-api/hc
       - IdentityUrlHC=http://identity-api/hc
       - BasketUrlHC=http://basket-api/hc

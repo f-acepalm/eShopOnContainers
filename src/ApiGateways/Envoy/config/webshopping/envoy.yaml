@@ -85,6 +85,19 @@ static_resources:
                 route:
                   auto_host_rewrite: true
                   cluster: coupon
+              - name: "l-short"
+                match:
+                  prefix: "/l/"
+                route:
+                  auto_host_rewrite: true
+                  prefix_rewrite: "/loyalty-api/"
+                  cluster: loyalty
+              - name: "l-long"
+                match:
+                  prefix: "/loyalty-api/"
+                route:
+                  auto_host_rewrite: true
+                  cluster: loyalty
               - name: "agg"
                 match:
                   prefix: "/"
@@ -160,4 +173,12 @@ static_resources:
     hosts:
     - socket_address:
         address: coupon-api
+        port_value: 80 
+  - name: loyalty
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        address: loyalty-api
         port_value: 80
