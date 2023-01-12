@@ -1,4 +1,6 @@
-﻿namespace Payment.API.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
+
+namespace Loyalty.API.IntegrationEvents.Events;
 
 public record OrderPaymentSucceededIntegrationEvent : IntegrationEvent
 {

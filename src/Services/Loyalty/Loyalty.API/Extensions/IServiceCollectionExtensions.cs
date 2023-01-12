@@ -2,6 +2,8 @@
 using Loyalty.API.DataAccess;
 using Loyalty.API.DataAccess.Repositories;
 using Loyalty.API.Filters;
+using Loyalty.API.IntegrationEvents.Events;
+using Loyalty.API.IntegrationEvents.Handlers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -192,6 +194,9 @@ public static class IServiceCollectionExtensions
                 return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
             });
         }
+
+        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>, OrderStatusChangedToPaidIntegrationEventHandler>();
+        services.AddTransient<IIntegrationEventHandler<PayWithPointsIntegrationEvent>, PayWithPointsIntegrationEventHandler>();
 
         return services;
     }

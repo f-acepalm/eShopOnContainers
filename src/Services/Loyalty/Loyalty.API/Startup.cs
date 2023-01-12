@@ -39,9 +39,7 @@ public class Startup
             .AddCustomAuthorization()
             .AddSwagger(Configuration)
             .AddCustomHealthCheck(Configuration);
-
-        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>, OrderStatusChangedToPaidIntegrationEventHandler>();
-
+        
         var container = new ContainerBuilder();
         container.Populate(services);
 
@@ -95,5 +93,6 @@ public class Startup
         IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
         eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>>();
+        eventBus.Subscribe<PayWithPointsIntegrationEvent, IIntegrationEventHandler<PayWithPointsIntegrationEvent>>();
     }
 }
