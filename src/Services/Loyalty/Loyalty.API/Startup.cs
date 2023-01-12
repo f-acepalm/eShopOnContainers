@@ -1,19 +1,18 @@
-using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using HealthChecks.UI.Client;
-using Loyalty.API.DataAccess;
 using Loyalty.API.Extensions;
 using Loyalty.API.Filters;
+using Loyalty.API.IntegrationEvents.Events;
+using Loyalty.API.IntegrationEvents.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Reflection;
 
 namespace Loyalty.API;
 
@@ -41,8 +40,7 @@ public class Startup
             .AddSwagger(Configuration)
             .AddCustomHealthCheck(Configuration);
 
-        //services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
-        //services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>, OrderStatusChangedToCancelledIntegrationEventHandler>();
+        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>, OrderStatusChangedToPaidIntegrationEventHandler>();
 
         var container = new ContainerBuilder();
         container.Populate(services);
@@ -90,12 +88,12 @@ public class Startup
             });
 
         ConfigureEventBus(app);
-    }   
+    }
 
     private void ConfigureEventBus(IApplicationBuilder app)
     {
         IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-        //eventBus.Subscribe<OrderStatusChangedToCancelledIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>>();
+        eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>>();
     }
 }

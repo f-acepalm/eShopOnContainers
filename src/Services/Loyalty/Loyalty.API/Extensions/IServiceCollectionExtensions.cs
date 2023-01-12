@@ -88,7 +88,8 @@ public static class IServiceCollectionExtensions
             });
         }
 
-        services.AddTransient<ILoyaltyRepository, LoyaltyRepository>()
+        services.AddTransient<ILoyaltyMemberRepository, LoyaltyRepository>()
+            .AddTransient<IMemberTierRepository, MemberTierRepository>()
             .AddTransient<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
         return services;

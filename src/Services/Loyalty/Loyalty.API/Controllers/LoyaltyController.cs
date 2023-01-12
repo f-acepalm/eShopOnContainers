@@ -3,8 +3,7 @@ using Loyalty.API.DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace Loyalty.API.Controllers;
@@ -14,21 +13,21 @@ namespace Loyalty.API.Controllers;
 [Route("api/v1/[controller]")]
 public class LoyaltyController : ControllerBase
 {
-    private readonly ILoyaltyRepository _repository;
+    private readonly ILoyaltyMemberRepository _loyaltyMemberrepository;
 
-    public LoyaltyController(ILoyaltyRepository repository)
+    public LoyaltyController(ILoyaltyMemberRepository loyaltyMemberrepository)
     {
-        _repository = repository;
+        _loyaltyMemberrepository = loyaltyMemberrepository;
     }
 
-    [HttpGet]
+    [HttpGet("{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<MemberTier>>> GetMemberTiers()
+    public async Task<ActionResult<LoyaltyMember>> GetLoyaltyMember(Guid userId)
     {
-        IEnumerable<MemberTier> result = await _repository.GetMemberTiers();
+        LoyaltyMember? result = await _loyaltyMemberrepository.GetLoyaltyMemberAsync(userId);
 
-        if (!result.Any())
+        if (result is null)
         {
             return NotFound();
         }
