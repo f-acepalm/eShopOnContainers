@@ -39,5 +39,7 @@ public class UrlsConfig
     public string GrpcOrdering { get; set; }
 
     public string Coupon { get; set; }
+
+    public string Loyalty { get; set; }
 }
 

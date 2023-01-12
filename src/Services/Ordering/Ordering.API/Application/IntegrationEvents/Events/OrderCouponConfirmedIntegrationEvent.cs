@@ -9,4 +9,10 @@ public record OrderCouponConfirmedIntegrationEvent : IntegrationEvent
 
     [JsonProperty]
     public int Discount { get; private set; }
+
+    public OrderCouponConfirmedIntegrationEvent(int orderId, int discount)
+    {
+        OrderId = orderId;
+        Discount = discount;
+    }
 }

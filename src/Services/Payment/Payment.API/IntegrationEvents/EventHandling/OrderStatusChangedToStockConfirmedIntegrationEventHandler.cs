@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.EventHandling;
+﻿using Payment.API.IntegrationEvents.Events;
+
+namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.EventHandling;
     
 public class OrderStatusChangedToStockConfirmedIntegrationEventHandler :
     IIntegrationEventHandler<OrderStatusChangedToStockConfirmedIntegrationEvent>
@@ -33,13 +35,22 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler :
             // Instead of a real payment we just take the env. var to simulate the payment 
             // The payment can be successful or it can fail
 
-            if (_settings.PaymentSucceeded)
+            var shouldPayWithPoints = true;
+
+            if (shouldPayWithPoints)
             {
-                orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
+                orderPaymentIntegrationEvent = new PayWithPointsIntegrationEvent(@event.OrderId, @event.BuyerId, @event.Price);
             }
             else
             {
-                orderPaymentIntegrationEvent = new OrderPaymentFailedIntegrationEvent(@event.OrderId);
+                if (_settings.PaymentSucceeded)
+                {
+                    orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
+                }
+                else
+                {
+                    orderPaymentIntegrationEvent = new OrderPaymentFailedIntegrationEvent(@event.OrderId);
+                }
             }
 
             _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} from {AppName} - ({@IntegrationEvent})", orderPaymentIntegrationEvent.Id, Program.AppName, orderPaymentIntegrationEvent);

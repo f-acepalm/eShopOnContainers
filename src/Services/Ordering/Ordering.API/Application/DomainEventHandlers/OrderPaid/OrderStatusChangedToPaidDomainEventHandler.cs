@@ -37,7 +37,9 @@ public class OrderStatusChangedToPaidDomainEventHandler
             orderStatusChangedToPaidDomainEvent.OrderId,
             order.OrderStatus.Name,
             buyer.Name,
-            orderStockList);
+            orderStockList,
+            buyer.IdentityGuid,
+            order.GetTotal());
 
         await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStatusChangedToPaidIntegrationEvent);
     }

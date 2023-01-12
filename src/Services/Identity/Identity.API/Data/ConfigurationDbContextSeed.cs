@@ -20,6 +20,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Data
             clientUrls.Add("WebhooksApi", configuration.GetValue<string>("WebhooksApiClient"));
             clientUrls.Add("WebhooksWeb", configuration.GetValue<string>("WebhooksWebClient"));
             clientUrls.Add("CouponApi", configuration.GetValue<string>("CouponApiClient"));
+            clientUrls.Add("LoyaltyApi", configuration.GetValue<string>("LoyaltyApiClient"));
 
             if (!context.Clients.Any())
             {

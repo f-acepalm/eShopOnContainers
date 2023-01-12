@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.Events;
+﻿namespace Payment.API.IntegrationEvents.Events;
 
 public record OrderPaymentSucceededIntegrationEvent : IntegrationEvent
 {

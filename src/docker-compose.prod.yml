@@ -63,6 +63,7 @@ services:
       - BasketApiClient=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiClient=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5102
       - CouponApiClient=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5106
+      - LoyaltyApiClient=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5109
       - MobileShoppingAggClient=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5120
       - WebShoppingAggClient=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5121
       - UseCustomizationData=True
@@ -120,6 +121,7 @@ services:
       - BasketUrlHC=http://basket-api/hc
       - PaymentUrlHC=http://payment-api/hc
       - CouponUrlHC=http://coupon-api/hc
+      - LoyaltyUrlHC=http://loyalty-api/hc
       - UseCustomizationData=True
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
@@ -138,6 +140,7 @@ services:
       - BasketUrlHC=http://basket-api/hc
       - PaymentUrlHC=http://payment-api/hc
       - CouponUrlHC=http://coupon-api/hc
+      - LoyaltyUrlHC=http://loyalty-api/hc
       - UseCustomizationData=True
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
@@ -155,6 +158,7 @@ services:
       - IdentityUrl=http://identity-api/hc
       - PaymentUrl=http://payment-api/hc
       - CouponUrl=http://coupon-api/hc
+      - LoyaltyUrl=http://loyalty-api/hc
       - mvc=http://webmvc/hc
       - spa=http://webspa/hc
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
@@ -186,6 +190,23 @@ services:
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - ConnectionString=mongodb://nosqldata:27017
+      - identityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrlExternal=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - UseLoadTest=${USE_LOADTEST:-False}
+    ports:
+      - "80"   # The API Gateway redirects and access through the internal port (80).
+
+  loyalty-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}
+      - AzureServiceBusEnabled=False
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - ConnectionString=${ESHOP_AZURE_ORDERING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.Loyalty;User Id=sa;Password=Pass@word}
       - identityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
       - IdentityUrlExternal=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5105
       - UseLoadTest=${USE_LOADTEST:-False}
@@ -239,6 +260,7 @@ services:
       - urls__catalog=http://catalog-api
       - urls__orders=http://ordering-api
       - urls__coupon=http://coupon-api
+      - urls__loyalty=http://loyalty-api
       - urls__identity=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
     ports:
       - "80"   # Important: In a production environment your should remove the external port (5120) kept here for microservice debugging purposes.
@@ -251,6 +273,7 @@ services:
       - urls__catalog=http://catalog-api
       - urls__orders=http://ordering-api
       - urls__coupon=http://coupon-api
+      - urls__loyalty=http://loyalty-api
       - urls__identity=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
     ports:
       - "80"   # Important: In a production environment your should remove the external port (5121) kept here for microservice debugging purposes.

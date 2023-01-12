@@ -86,6 +86,15 @@ services:
     depends_on:
       - nosqldata
       - rabbitmq
+  
+  loyalty-api:
+    image: ${REGISTRY:-eshop}/loyalty.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Loyalty/Loyalty.API/Dockerfile
+    depends_on:
+      - sqldata
+      - rabbitmq
 
   mobileshoppingapigw:
     image: envoyproxy/envoy:v1.11.1
@@ -104,6 +113,7 @@ services:
       - catalog-api
       - basket-api
       - coupon-api
+      - loyalty-api
 
   webshoppingagg:
     image: ${REGISTRY:-eshop}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
@@ -119,6 +129,7 @@ services:
       - catalog-api
       - basket-api
       - coupon-api
+      - loyalty-api
 
   ordering-signalrhub:
     image: ${REGISTRY:-eshop}/ordering.signalrhub:${PLATFORM:-linux}-${TAG:-latest}
@@ -134,6 +145,7 @@ services:
       - catalog-api
       - basket-api
       - coupon-api
+      - loyalty-api
 
   webstatus:
     image: ${REGISTRY:-eshop}/webstatus:${PLATFORM:-linux}-${TAG:-latest}

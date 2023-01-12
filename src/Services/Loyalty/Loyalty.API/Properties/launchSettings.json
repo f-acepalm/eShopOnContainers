@@ -1,0 +1,12 @@
+﻿{
+  "profiles": {
+    "Microsoft.eShopOnContainers.Services.Loyalty.API": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:55109/",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
