@@ -38,7 +38,7 @@ COPY "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj" "Services/
 COPY "Services/Payment/Payment.API/Payment.API.csproj" "Services/Payment/Payment.API/Payment.API.csproj"
 COPY "Services/Webhooks/Webhooks.API/Webhooks.API.csproj" "Services/Webhooks/Webhooks.API/Webhooks.API.csproj"
 COPY "Services/Coupon/Coupon.API/Coupon.API.csproj" "Services/Coupon/Coupon.API/Coupon.API.csproj"
-COPY "Services/Loyanlty/Loyanlty.API/Loyanlty.API.csproj" "Services/Loyanlty/Loyanlty.API/Loyanlty.API.csproj"
+COPY "Services/Loyalty/Loyalty.API/Loyalty.API.csproj" "Services/Loyalty/Loyalty.API/Loyalty.API.csproj"
 COPY "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj" "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj"
 COPY "Web/WebhookClient/WebhookClient.csproj" "Web/WebhookClient/WebhookClient.csproj"
 COPY "Web/WebMVC/WebMVC.csproj" "Web/WebMVC/WebMVC.csproj"
@@ -52,7 +52,7 @@ COPY "NuGet.config" "NuGet.config"
 RUN dotnet restore "eShopOnContainers-ServicesAndWebApps.sln"
 
 COPY . .
-WORKDIR /src/Services/Loyanlty/Loyanlty.API
+WORKDIR /src/Services/Loyalty/Loyalty.API
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM build AS publish
@@ -60,4 +60,4 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Loyanlty.API.dll"]
+ENTRYPOINT ["dotnet", "Loyalty.API.dll"]
