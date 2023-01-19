@@ -6,6 +6,8 @@ app:                                                    # app global settings
   ingress:                                              # ingress related settings
     entries:
       basket: basket-api                                # ingress entry for basket api
+      coupon: coupon-api                                # ingress entry for coupon api
+      loyalty: loyalty-api                              # ingress entry for loyalty api
       catalog: catalog-api                              # ingress entry for catalog api
       ordering: ordering-api                            # ingress entry for ordering api
       identity: identity                                # ingress entry for identity api
@@ -21,6 +23,8 @@ app:                                                    # app global settings
       webhooksweb: webhooks-web                         # ingress entry for webhooks web demo client
   svc:
       basket: basket-api                                # service name for basket api
+      coupon: coupon-api                                # service name for coupon api
+      loyalty: loyalty-api                              # service name for loyalty api
       catalog: catalog-api                              # service name for catalog api
       ordering: ordering-api                            # service name for ordering api
       orderingbackgroundtasks: ordering-backgroundtasks # service name for orderingbackgroundtasks
