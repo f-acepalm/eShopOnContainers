@@ -10,6 +10,7 @@ using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 
 namespace Coupon.API
@@ -25,6 +26,8 @@ namespace Coupon.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddControllers(options => options.Filters.Add<ValidateModelAttribute>());
 
             services.AddCustomSettings(Configuration)
