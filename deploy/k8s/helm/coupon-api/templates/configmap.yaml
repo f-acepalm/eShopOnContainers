@@ -1,5 +1,5 @@
 {{- $name := include "coupon-api.fullname" . -}}
-# {{- $sqlsrv := include "sql-name" . -}}
+{{- $sqlsrv := include "mongo-name" . -}}
 {{- $webshoppingapigw := include "url-of" (list .Values.app.ingress.entries.webshoppingapigw .) -}}
 
 apiVersion: v1
@@ -12,7 +12,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  coupon__ConnectionString: mongodb://nosqldata:27017
+  coupon__ConnectionString: mongodb://{{ $sqlsrv }}:27017
   coupon__AzureStorageEnabled: "{{ .Values.inf.misc.useAzureStorage }}"
   all__EventBusConnection: {{ .Values.inf.eventbus.constr }}
   all__InstrumentationKey: "{{ .Values.inf.appinsights.key }}"
