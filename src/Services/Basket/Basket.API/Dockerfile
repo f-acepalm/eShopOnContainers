@@ -35,7 +35,7 @@ COPY "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj" "Services/
 COPY "Services/Payment/Payment.API/Payment.API.csproj" "Services/Payment/Payment.API/Payment.API.csproj"
 COPY "Services/Webhooks/Webhooks.API/Webhooks.API.csproj" "Services/Webhooks/Webhooks.API/Webhooks.API.csproj"
 COPY "Services/Coupon/Coupon.API/Coupon.API.csproj" "Services/Coupon/Coupon.API/Coupon.API.csproj"
-COPY "Services/Loyanlty/Loyanlty.API/Loyanlty.API.csproj" "Services/Loyanlty/Loyanlty.API/Loyanlty.API.csproj"
+COPY "Services/Loyalty/Loyalty.API/Loyalty.API.csproj" "Services/Loyalty/Loyalty.API/Loyalty.API.csproj"
 COPY "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj" "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj"
 COPY "Web/WebhookClient/WebhookClient.csproj" "Web/WebhookClient/WebhookClient.csproj"
 COPY "Web/WebMVC/WebMVC.csproj" "Web/WebMVC/WebMVC.csproj"

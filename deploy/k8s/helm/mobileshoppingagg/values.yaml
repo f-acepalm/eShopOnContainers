@@ -36,13 +36,21 @@ env:
     - name: urls__basket
       key: internalurls__basket
     - name: urls__catalog
-      key: internalurls__catalog
+      key: internalurls__catalog    
+    - name: urls__loyalty
+      key: internalurls__loyalty 
+    - name: urls__coupon
+      key: internalurls__coupon
     - name: urls__orders
       key: internalurls__ordering
     - name: urls__identity
       key: internalurls__identity
     - name: CatalogUrlHC
       key: internalurls__catalog__hc
+    - name: CouponUrlHC
+      key: internalurls__coupon__hc
+    - name: LoyaltyUrlHC
+      key: internalurls__loyalty__hc
     - name: BasketUrlHC
       key: internalurls__basket__hc
     - name: IdentityUrlHC

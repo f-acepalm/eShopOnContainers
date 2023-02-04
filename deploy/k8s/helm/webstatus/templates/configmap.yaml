@@ -37,6 +37,10 @@ data:
   internalurls__basket__hc: http://{{ .Values.app.svc.basket }}/hc
   name__catalog__hc: Catalog HTTP Check
   internalurls__catalog__hc: http://{{ .Values.app.svc.catalog }}/hc
+  name__coupon__hc: Coupon HTTP Check
+  internalurls__coupon__hc: http://{{ .Values.app.svc.coupon }}/hc
+  name__loyalty__hc: Loyalty HTTP Check
+  internalurls__loyalty__hc: http://{{ .Values.app.svc.loyalty }}/hc
   name__identity__hc: Identity HTTP Check
   internalurls__identity__hc: http://{{ .Values.app.svc.identity }}/hc
   name__payment__hc: Payment HTTP Check

@@ -9,6 +9,8 @@ Param(
 $gitContext = "https://github.com/$gitUser/$repoName"
 
 $services = @( 
+    @{ Name="eshopcoupon"; Image="eshop/coupon.api"; File="src/Services/Coupon/Coupon.API/Dockerfile" },
+    @{ Name="eshoployalty"; Image="eshop/loyalty.api"; File="src/Services/Loyalty/Loyalty.API/Dockerfile" },
     @{ Name="eshopbasket"; Image="eshop/basket.api"; File="src/Services/Basket/Basket.API/Dockerfile" },
     @{ Name="eshopcatalog"; Image="eshop/catalog.api"; File="src/Services/Catalog/Catalog.API/Dockerfile" },
     @{ Name="eshopidentity"; Image="eshop/identity.api"; File="src/Services/Identity/Identity.API/Dockerfile" },

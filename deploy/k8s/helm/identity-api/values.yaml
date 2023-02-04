@@ -42,6 +42,10 @@ env:
       key: spa_e
     - name: BasketApiClient
       key: basket_e
+    - name: LoyaltyApiClient
+      key: loyalty_e
+    - name: CouponApiClient
+      key: coupon_e
     - name: OrderingApiClient
       key: ordering_e
     - name: MobileShoppingAggClient
