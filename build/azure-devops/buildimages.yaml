@@ -35,8 +35,9 @@ jobs:
     displayName: Compose build ${{ parameters.services }}
     inputs:
       dockerComposeCommand: 'build ${{ parameters.services }}'
-      containerregistrytype: Container Registry
-      dockerRegistryEndpoint: ${{ parameters.registryEndpoint }}
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscriptionEndpoint: 'EshopSubscription'
+      azureContainerRegistry: eshopacr.azurecr.io
       dockerComposeFile: src/docker-compose.yml
       qualifyImageNames: true
       projectName: ""
@@ -46,8 +47,9 @@ jobs:
     displayName: Compose push ${{ parameters.images }}
     inputs:
       dockerComposeCommand: 'push ${{ parameters.services }}'
-      containerregistrytype: Container Registry
-      dockerRegistryEndpoint: ${{ parameters.registryEndpoint }}
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscriptionEndpoint: 'EshopSubscription'
+      azureContainerRegistry: eshopacr.azurecr.io
       dockerComposeFile: src/docker-compose.yml
       qualifyImageNames: true
       projectName: ""
@@ -71,8 +73,9 @@ jobs:
     displayName: Compose build ${{ parameters.services }}
     inputs:
       dockerComposeCommand: 'build ${{ parameters.services }}'
-      containerregistrytype: Container Registry
-      dockerRegistryEndpoint: ${{ parameters.registryEndpoint }}
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscriptionEndpoint: 'EshopSubscription'
+      azureContainerRegistry: eshopacr.azurecr.io
       dockerComposeFile: src/docker-compose.yml
       qualifyImageNames: true
       projectName: ""
@@ -84,8 +87,9 @@ jobs:
     displayName: Compose push ${{ parameters.services }}
     inputs:
       dockerComposeCommand: 'push ${{ parameters.services }}'
-      containerregistrytype: Container Registry
-      dockerRegistryEndpoint: ${{ parameters.registryEndpoint }}
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscriptionEndpoint: 'EshopSubscription'
+      azureContainerRegistry: eshopacr.azurecr.io
       dockerComposeFile: src/docker-compose.yml
       qualifyImageNames: true
       projectName: ""
