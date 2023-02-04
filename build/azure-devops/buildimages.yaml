@@ -8,7 +8,7 @@ jobs:
 - job: BuildContainersForPR_Linux
   condition: eq('${{ variables['Build.Reason'] }}', 'PullRequest')
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-latest'
   steps:
   - bash: docker-compose -f src/docker-compose.yml build ${{ parameters.services }}
     displayName: Compose build ${{ parameters.services }}
@@ -29,7 +29,7 @@ jobs:
 - job: BuildLinux
   condition: ne('${{ variables['Build.Reason'] }}', 'PullRequest')
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-latest'
   steps:
   - task: DockerCompose@0
     displayName: Compose build ${{ parameters.services }}
