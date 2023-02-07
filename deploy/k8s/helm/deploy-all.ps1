@@ -77,7 +77,7 @@ if ($externalDns -eq "aks") {
     }
     $dns = $dns -replace '[\"]'
     Write-Host "DNS base found is $dns. Will use $appName.$dns for the app!" -ForegroundColor Green
-    $dns = "$appName.$dns"
+    $dns = "$aksName.$dns"
 }
 
 # Initialization & check commands

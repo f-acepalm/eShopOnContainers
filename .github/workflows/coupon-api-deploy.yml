@@ -1,4 +1,4 @@
-name: Deploy webstatus
+name: Deploy coupon-api
 
 on:
   workflow_dispatch:
@@ -6,12 +6,12 @@ on:
     types:
     - deploy
   workflow_run:
-    workflows: ["webstatus"]
+    workflows: ["coupon-api"]
     branches: [dev]
     types: [completed]
 
 env:
-  CHART: webstatus
+  CHART: coupon-api
   NAMESPACE: default
   CHART_ROOT: deploy/k8s/helm
 
