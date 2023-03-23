@@ -4,6 +4,7 @@ using Loyalty.API.DataAccess.Repositories;
 using Loyalty.API.Filters;
 using Loyalty.API.IntegrationEvents.Events;
 using Loyalty.API.IntegrationEvents.Handlers;
+using Loyalty.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 
 namespace Loyalty.API.Extensions;
@@ -49,6 +51,7 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddLoyaltyServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddTransient<IIdentityService, IdentityService>();
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
@@ -256,6 +259,9 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
+        // prevent from mapping "sub" claim to nameidentifier.
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+
         return services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

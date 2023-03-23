@@ -1,5 +1,6 @@
 ﻿using Loyalty.API.DataAccess.Entities;
 using Loyalty.API.DataAccess.Repositories;
+using Loyalty.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,17 +15,22 @@ namespace Loyalty.API.Controllers;
 public class LoyaltyController : ControllerBase
 {
     private readonly ILoyaltyMemberRepository _loyaltyMemberrepository;
+    private readonly IIdentityService _identityService;
 
-    public LoyaltyController(ILoyaltyMemberRepository loyaltyMemberrepository)
+    public LoyaltyController(
+        ILoyaltyMemberRepository loyaltyMemberrepository,
+        IIdentityService identityService)
     {
         _loyaltyMemberrepository = loyaltyMemberrepository;
+        _identityService = identityService;
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LoyaltyMember>> GetLoyaltyMember(Guid userId)
+    public async Task<ActionResult<LoyaltyMember>> GetLoyaltyMember()
     {
+        var userId = Guid.Parse(_identityService.GetUserIdentity());
         LoyaltyMember? result = await _loyaltyMemberrepository.GetLoyaltyMemberAsync(userId);
 
         if (result is null)

@@ -1,5 +1,6 @@
 ﻿using Loyalty.API.DataAccess.Entities;
 using Loyalty.API.DataAccess.Repositories;
+using Loyalty.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,14 @@ namespace Loyalty.API.Controllers;
 public class MemberTierController : ControllerBase
 {
     private readonly IMemberTierRepository _memberTierRepository;
+    private readonly IIdentityService _identityService;
 
-    public MemberTierController(IMemberTierRepository memberTierRepository)
+    public MemberTierController(
+        IMemberTierRepository memberTierRepository,
+        IIdentityService identityService)
     {
         _memberTierRepository = memberTierRepository;
+        _identityService = identityService;
     }
 
     [HttpGet]
@@ -36,11 +41,12 @@ public class MemberTierController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet("current")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<MemberTier>>> GetMemberTier(Guid userId)
+    public async Task<ActionResult<IEnumerable<MemberTier>>> GetMemberTier()
     {
+        var userId = Guid.Parse(_identityService.GetUserIdentity());
         var result = await _memberTierRepository.GetMemberTierAsync(userId);
 
         if (result is null)

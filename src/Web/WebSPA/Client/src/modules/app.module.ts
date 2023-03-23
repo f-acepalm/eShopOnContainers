@@ -11,6 +11,7 @@ import { CatalogModule } from './catalog/catalog.module';
 import { OrdersModule } from './orders/orders.module';
 import { BasketModule } from './basket/basket.module';
 import { ToastrModule } from 'ngx-toastr';
+import { LoyaltyModule } from './loyalty/loyalty.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -24,7 +25,8 @@ import { ToastrModule } from 'ngx-toastr';
         SharedModule.forRoot(),
         CatalogModule,
         OrdersModule,
-        BasketModule
+        BasketModule,
+        LoyaltyModule
     ],
     providers: [
         AppService
