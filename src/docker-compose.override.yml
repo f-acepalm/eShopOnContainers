@@ -211,7 +211,7 @@ services:
       - UseLoadTest=${USE_LOADTEST:-False}
       - PORT=80
       - PATH_BASE=/loyalty-api
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.LoyaltyDb;User Id=sa;Password=Pass@word}
+      - ConnectionString=${ESHOP_AZURE_LOYALTY_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.LoyaltyDb;User Id=sa;Password=Pass@word}
     ports:
       - "5109:80"
       - "9109:81"

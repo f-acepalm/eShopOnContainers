@@ -1,0 +1,13 @@
+<div class="esh-loyalty">
+    <div class="container">
+        <h1 class="mb-4 mt-5">Loyalty details</h1>
+        <div class="esh-orders-alert alert" role="alert" [hidden]="!errorReceived">
+            Error requesting loyalty details, please try later on
+        </div>
+
+        <div>You spent total: {{loyaltyDetails.totalSpent}}$</div>
+        <div>You have {{loyaltyDetails.points}} points</div>
+        <div>Your member tier: {{memberTier.name}}</div>
+        <div>You have {{memberTier.discount}}% discount</div>
+    </div>
+</div>
